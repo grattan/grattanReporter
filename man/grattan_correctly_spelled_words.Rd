@@ -4,7 +4,9 @@
 \name{grattan_correctly_spelled_words}
 \alias{grattan_correctly_spelled_words}
 \title{List of correctly spelled words}
-\format{A character vector of words as perl-regex patterns to skip during the spell check.}
+\format{
+A character vector of words as perl-regex patterns to skip during the spell check.
+}
 \usage{
 grattan_correctly_spelled_words
 }

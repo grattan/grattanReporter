@@ -4,7 +4,9 @@
 \name{correctly_spelled_words_fixed_txt}
 \alias{correctly_spelled_words_fixed_txt}
 \title{List of correctly spelled words}
-\format{A character vector of words as fixed words to skip during the spell check.}
+\format{
+A character vector of words as fixed words to skip during the spell check.
+}
 \usage{
 correctly_spelled_words_fixed_txt
 }

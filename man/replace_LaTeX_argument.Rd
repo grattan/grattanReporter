@@ -4,8 +4,12 @@
 \alias{replace_LaTeX_argument}
 \title{Replace contents of LaTeX argument}
 \usage{
-replace_LaTeX_argument(tex_lines, command_name, replacement,
-  .dummy_replacer = "ZzZz")
+replace_LaTeX_argument(
+  tex_lines,
+  command_name,
+  replacement,
+  .dummy_replacer = "ZzZz"
+)
 }
 \arguments{
 \item{tex_lines}{Lines of text (as from \code{readLines}).}

@@ -3,11 +3,14 @@
 #' @param file The bib file if specified.
 #' @param .report_error How errors should be reported.
 #' @param rstudio Use the RStudio API?
+#' @param check_comma Logical. If `TRUE`, an error will be given if each .bib entry 
+#' does not end with a comma. `FALSE` by default.
 #' @return \code{NULL} if bibliography validated.
 #' @export
 
 
-validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudio = FALSE) {
+validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudio = FALSE,
+                                  check_comma = FALSE) {
   
   if (missing(.report_error)){
     .report_error <- function(...) report2console(file = file, ..., rstudio = rstudio)
@@ -59,12 +62,14 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
   bib <-
     bib[!grepl("% Valid", bib, fixed = TRUE)]
 
-  if (any(grepl(".[}]$", bib, perl = TRUE))){
-    line_no <- grep(".[}]$", bib, perl = TRUE)[[1]]
-    .report_error(line_no = line_no,
-                  context = bib[line_no],
-                  error_message = "Each field line in .bib must end with a comma (to allow reordering).")
-    stop("Each field line in .bib must end with a comma (to allow intra-entry reordering).")
+  if(isTRUE(check_comma)) {
+    if (any(grepl(".[}]$", bib, perl = TRUE))){
+      line_no <- grep(".[}]$", bib, perl = TRUE)[[1]]
+      .report_error(line_no = line_no,
+                    context = bib[line_no],
+                    error_message = "Each field line in .bib must end with a comma (to allow reordering).")
+      stop("Each field line in .bib must end with a comma (to allow intra-entry reordering).")
+    }
   }
 
   # Abbreviated names

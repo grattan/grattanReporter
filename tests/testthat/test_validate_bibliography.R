@@ -36,3 +36,15 @@ test_that("Issue 75: Attorney-Generals", {
                regexp = "Attorney")
 })
 
+test_that("Absence of final comma throws error when appropriate", {
+  no_comma_bib <- "./validate-bib/no-comma.bib"
+  expect_null(validate_bibliography(file = no_comma_bib))
+  expect_null(validate_bibliography(file = no_comma_bib, check_comma = FALSE))
+  expect_error(validate_bibliography(file = no_comma_bib, check_comma = TRUE))
+  
+  comma_bib <-  "./validate-bib/has-comma.bib"
+  expect_null(validate_bibliography(file = comma_bib))
+  expect_null(validate_bibliography(file = comma_bib, check_comma = FALSE))
+  expect_null(validate_bibliography(file = comma_bib, check_comma = TRUE))
+})
+

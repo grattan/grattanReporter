@@ -5,15 +5,33 @@
 \alias{checkGrattanReports}
 \title{Check Grattan Report}
 \usage{
-checkGrattanReport(path = ".", compile = FALSE, pre_release = FALSE,
-  release = FALSE, .proceed_after_rerun, .no_log = TRUE,
-  .log_psv = FALSE, embed = TRUE, rstudio = FALSE,
-  update_grattan.cls = pre_release, filename = NULL,
-  bib_warn_only = FALSE)
+checkGrattanReport(
+  path = ".",
+  compile = FALSE,
+  pre_release = FALSE,
+  release = FALSE,
+  .proceed_after_rerun,
+  .no_log = TRUE,
+  .log_psv = FALSE,
+  embed = TRUE,
+  rstudio = FALSE,
+  update_grattan.cls = pre_release,
+  filename = NULL,
+  bib_warn_only = FALSE,
+  check_comma = FALSE
+)
 
-checkGrattanReports(path = ".", compile = FALSE, pre_release = FALSE,
-  release = FALSE, .proceed_after_rerun, .no_log = TRUE,
-  embed = TRUE, rstudio = FALSE, update_grattan.cls = TRUE)
+checkGrattanReports(
+  path = ".",
+  compile = FALSE,
+  pre_release = FALSE,
+  release = FALSE,
+  .proceed_after_rerun,
+  .no_log = TRUE,
+  embed = TRUE,
+  rstudio = FALSE,
+  update_grattan.cls = TRUE
+)
 }
 \arguments{
 \item{path}{Path to search for the tex source file.}
@@ -44,6 +62,8 @@ Set to \code{FALSE} when checking the \code{grattex} repo itself. Also downloads
 set to the sole \code{.tex} file within \code{path}.}
 
 \item{bib_warn_only}{If \code{TRUE}, show biber warnings as messages rather than errors.}
+
+\item{check_comma}{If \code{TRUE}, will check to see that each bib entry ends with a comma after its final field. If \code{FALSE} (the default), this check will not be performed.}
 }
 \value{
 Called for its side-effect.

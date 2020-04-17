@@ -4,8 +4,13 @@
 \alias{validate_bibliography}
 \title{Validate bibliography according Grattan style}
 \usage{
-validate_bibliography(path = ".", file = NULL, .report_error,
-  rstudio = FALSE)
+validate_bibliography(
+  path = ".",
+  file = NULL,
+  .report_error,
+  rstudio = FALSE,
+  check_comma = FALSE
+)
 }
 \arguments{
 \item{path}{Containing the bib file.}
@@ -15,6 +20,9 @@ validate_bibliography(path = ".", file = NULL, .report_error,
 \item{.report_error}{How errors should be reported.}
 
 \item{rstudio}{Use the RStudio API?}
+
+\item{check_comma}{Logical. If `TRUE`, an error will be given if each .bib entry 
+does not end with a comma. `FALSE` by default.}
 }
 \value{
 \code{NULL} if bibliography validated.

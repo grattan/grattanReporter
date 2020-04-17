@@ -4,8 +4,7 @@
 \alias{check_preamble}
 \title{Check the preamble of a document}
 \usage{
-check_preamble(filename, .report_error, pre_release = FALSE,
-  release = FALSE)
+check_preamble(filename, .report_error, pre_release = FALSE, release = FALSE)
 }
 \arguments{
 \item{filename}{.tex file to check for errors}

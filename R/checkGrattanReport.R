@@ -19,6 +19,7 @@
 #' set to the sole \code{.tex} file within \code{path}.
 #' @return Called for its side-effect.
 #' @param bib_warn_only If \code{TRUE}, show biber warnings as messages rather than errors.
+#' @param check_comma If \code{TRUE}, will check to see that each bib entry ends with a comma after its final field. If \code{FALSE} (the default), this check will not be performed.
 #' @export checkGrattanReport checkGrattanReports
 #' @import data.table
 #' @importFrom hutils if_else
@@ -59,7 +60,8 @@ checkGrattanReport <- function(path = ".",
                                rstudio = FALSE,
                                update_grattan.cls = pre_release,
                                filename = NULL,
-                               bib_warn_only = FALSE) {
+                               bib_warn_only = FALSE,
+                               check_comma = FALSE) {
   if (Sys.getenv("TRAVIS") == "true") {
     print(utils::packageVersion("grattanReporter"))
   }
@@ -372,7 +374,8 @@ checkGrattanReport <- function(path = ".",
         next
       }
     } else {
-      validate_bibliography(file = bib_file, rstudio = rstudio, .report_error = .report_error)
+      validate_bibliography(file = bib_file, rstudio = rstudio, .report_error = .report_error,
+                            check_comma = check_comma)
     }
     if (grepl("ropbox", full_bib_file, fixed = TRUE)) {
       cat("N: Not marking MD5 sum of valid file as the project",

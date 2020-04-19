@@ -4,7 +4,9 @@
 #' @param .report_error How errors should be reported.
 #' @param rstudio Use the RStudio API?
 #' @param check_comma Logical. If `TRUE`, an error will be given if each .bib entry 
-#' does not end with a comma. `TRUE` by default.
+#' does not end with a comma. `TRUE` by default. If errors from absent trailing commas 
+#' become annoying, run `lint_bib()` on the bibliography file to add commas in places 
+#' expected by this check.
 #' @return \code{NULL} if bibliography validated.
 #' @export
 

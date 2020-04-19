@@ -19,7 +19,7 @@
 #' set to the sole \code{.tex} file within \code{path}.
 #' @return Called for its side-effect.
 #' @param bib_warn_only If \code{TRUE}, show biber warnings as messages rather than errors.
-#' @param check_comma If \code{TRUE}, will check to see that each bib entry ends with a comma after its final field. If \code{FALSE} (the default), this check will not be performed.
+#' @param check_comma If \code{TRUE} (the default), will check to see that each bib entry ends with a comma after its final field. If \code{FALSE}, this check will not be performed. If errors from absent trailing commas become annoying, run `lint_bib()` on the bibliography file to add commas in places expected by this check.
 #' @export checkGrattanReport checkGrattanReports
 #' @import data.table
 #' @importFrom hutils if_else
@@ -61,7 +61,7 @@ checkGrattanReport <- function(path = ".",
                                update_grattan.cls = pre_release,
                                filename = NULL,
                                bib_warn_only = FALSE,
-                               check_comma = FALSE) {
+                               check_comma = TRUE) {
   if (Sys.getenv("TRAVIS") == "true") {
     print(utils::packageVersion("grattanReporter"))
   }

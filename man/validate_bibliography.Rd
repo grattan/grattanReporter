@@ -9,7 +9,7 @@ validate_bibliography(
   file = NULL,
   .report_error,
   rstudio = FALSE,
-  check_comma = FALSE
+  check_comma = TRUE
 )
 }
 \arguments{
@@ -22,7 +22,7 @@ validate_bibliography(
 \item{rstudio}{Use the RStudio API?}
 
 \item{check_comma}{Logical. If `TRUE`, an error will be given if each .bib entry 
-does not end with a comma. `FALSE` by default.}
+does not end with a comma. `TRUE` by default.}
 }
 \value{
 \code{NULL} if bibliography validated.

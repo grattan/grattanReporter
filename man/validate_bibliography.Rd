@@ -9,7 +9,8 @@ validate_bibliography(
   file = NULL,
   .report_error,
   rstudio = FALSE,
-  check_comma = TRUE
+  check_comma = TRUE,
+  stop_on_AG = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ validate_bibliography(
 does not end with a comma. `TRUE` by default. If errors from absent trailing commas 
 become annoying, run `lint_bib()` on the bibliography file to add commas in places 
 expected by this check.}
+
+\item{stop_on_AG}{Stop when an AG error is found. Set to \code{FALSE} to skip this check.}
 }
 \value{
 \code{NULL} if bibliography validated.

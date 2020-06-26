@@ -7,12 +7,13 @@
 #' does not end with a comma. `TRUE` by default. If errors from absent trailing commas 
 #' become annoying, run `lint_bib()` on the bibliography file to add commas in places 
 #' expected by this check.
+#' @param stop_on_AG Stop when an AG error is found. Set to \code{FALSE} to skip this check.
 #' @return \code{NULL} if bibliography validated.
 #' @export
 
 
 validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudio = FALSE,
-                                  check_comma = TRUE) {
+                                  check_comma = TRUE, stop_on_AG = FALSE) {
   
   if (missing(.report_error)){
     .report_error <- function(...) report2console(file = file, ..., rstudio = rstudio)
@@ -350,7 +351,7 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                     error_message = paste0("Author needs to be:\n\t",
                                            "{{Attorney-General's Department}}\n",
                                            "precisely."))
-      stop("Attorney-General's Department: author")
+      if (stop_on_AG) stop("Attorney-General's Department: author")
     }
 
     AG_urls <-
@@ -372,7 +373,7 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                                            "Attorney-General's Department ",
                                            "but url did not contain ",
                                            ".ag.gov.au"))
-      stop("Attorney-General's Department: url")
+      if (stop_on_AG) stop("Attorney-General's Department: url")
     }
   }
 

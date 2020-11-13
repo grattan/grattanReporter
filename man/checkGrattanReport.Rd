@@ -18,7 +18,7 @@ checkGrattanReport(
   update_grattan.cls = pre_release,
   filename = NULL,
   bib_warn_only = FALSE,
-  skip_bib = FALSE,
+  skip_bib_duplicates = FALSE,
   check_comma = TRUE
 )
 
@@ -64,7 +64,7 @@ set to the sole \code{.tex} file within \code{path}.}
 
 \item{bib_warn_only}{If \code{TRUE}, show biber warnings as messages rather than errors.}
 
-\item{skip_bib}{If \code{TRUE}, Skips the bib checks.#'}
+\item{skip_bib_duplicates}{If \code{TRUE}, Skips the bib check for duplicates.#'}
 
 \item{check_comma}{If \code{TRUE} (the default), will check to see that each bib entry ends with a comma after its final field. If \code{FALSE}, this check will not be performed. If errors from absent trailing commas become annoying, run `lint_bib()` on the bibliography file to add commas in places expected by this check.}
 }

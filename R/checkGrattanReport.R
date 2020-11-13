@@ -19,7 +19,7 @@
 #' set to the sole \code{.tex} file within \code{path}.
 #' @return Called for its side-effect.
 #' @param bib_warn_only If \code{TRUE}, show biber warnings as messages rather than errors.
-#' @param skip_bib If \code{TRUE}, Skips the bib checks.#' 
+#' @param skip_bib_duplicates If \code{TRUE}, Skips the bib check for duplicates.#' 
 #' @param check_comma If \code{TRUE} (the default), will check to see that each bib entry ends with a comma after its final field. If \code{FALSE}, this check will not be performed. If errors from absent trailing commas become annoying, run `lint_bib()` on the bibliography file to add commas in places expected by this check.
 #' @export checkGrattanReport checkGrattanReports
 #' @import data.table
@@ -62,7 +62,7 @@ checkGrattanReport <- function(path = ".",
                                update_grattan.cls = pre_release,
                                filename = NULL,
                                bib_warn_only = FALSE,
-                               skip_bib = FALSE,
+                               skip_bib_duplicates = FALSE,
                                check_comma = TRUE) {
   if (Sys.getenv("TRAVIS") == "true") {
     print(utils::packageVersion("grattanReporter"))
@@ -351,7 +351,7 @@ checkGrattanReport <- function(path = ".",
   cat(green(symbol$tick, "No obviously unbalanced parentheses.\n"))
   
   
-  if (!skip_bib) {
+ 
   # To check the bibliography
   bib_files <-
     read_lines(filename) %>%
@@ -394,6 +394,7 @@ checkGrattanReport <- function(path = ".",
   if (all(bib_files_still_ok)) {
     cat(green(symbol$tick, "Duplicates previously checked.\n"))
   } else {
+     if (!skip_bib_duplicates) {
     tryCatch(any_bib_duplicates(bib.files = bib_files),
              error = function(e) {
                for (bib_file in bib_files) {
@@ -402,7 +403,8 @@ checkGrattanReport <- function(path = ".",
                stop(e)
              })
     cat(green(symbol$tick, "No obvious duplicates in bibliography.\n"))
-  }
+    } else {cat(green(symbol$tick, "You've asked not to check for duplicates in the bibliography.\n"))}
+  
   } # end bib
   
   

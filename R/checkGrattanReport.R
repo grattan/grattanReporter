@@ -20,7 +20,6 @@
 #' @return Called for its side-effect.
 #' @param bib_warn_only If \code{TRUE}, show biber warnings as messages rather than errors.
 #' @param check_comma If \code{TRUE} (the default), will check to see that each bib entry ends with a comma after its final field. If \code{FALSE}, this check will not be performed. If errors from absent trailing commas become annoying, run `lint_bib()` on the bibliography file to add commas in places expected by this check.
-#' @param skip_AG_check If \code{TRUE}, skip bibliography checks for Attorney-General's Department.
 #' @export checkGrattanReport checkGrattanReports
 #' @import data.table
 #' @importFrom hutils if_else
@@ -62,8 +61,7 @@ checkGrattanReport <- function(path = ".",
                                update_grattan.cls = pre_release,
                                filename = NULL,
                                bib_warn_only = FALSE,
-                               check_comma = TRUE,
-                               skip_AG_check = TRUE) {
+                               check_comma = TRUE) {
   if (Sys.getenv("TRAVIS") == "true") {
     print(utils::packageVersion("grattanReporter"))
   }
@@ -377,7 +375,7 @@ checkGrattanReport <- function(path = ".",
       }
     } else {
       validate_bibliography(file = bib_file, rstudio = rstudio, .report_error = .report_error,
-                            check_comma = check_comma, stop_on_AG = !skip_AG_check)
+                            check_comma = check_comma, bib_warn_only = bib_warn_only)
     }
     if (grepl("ropbox", full_bib_file, fixed = TRUE)) {
       cat("N: Not marking MD5 sum of valid file as the project",

@@ -7,13 +7,13 @@
 #' does not end with a comma. `TRUE` by default. If errors from absent trailing commas 
 #' become annoying, run `lint_bib()` on the bibliography file to add commas in places 
 #' expected by this check.
-#' @param stop_on_AG Stop when an AG error is found. Set to \code{FALSE} to skip this check.
+#' @param bib_warn_only Only warn on bibliography issues.
 #' @return \code{NULL} if bibliography validated.
 #' @export
 
 
 validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudio = FALSE,
-                                  check_comma = TRUE, stop_on_AG = FALSE) {
+                                  check_comma = TRUE, bib_warn_only = FALSE) {
   
   if (missing(.report_error)){
     .report_error <- function(...) report2console(file = file, ..., rstudio = rstudio)
@@ -59,7 +59,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                                     "If you can, run\n\t",
                                     "lint_bib('", bib_file, "')")
                   )
-    stop(bib_file, " contains line which is neither a key, nor field, nor closing.")
+    if (bib_warn_only)  warning(bib_file, " contains line which is neither a key, nor field, nor closing.")
+    if (!bib_warn_only)    stop(bib_file, " contains line which is neither a key, nor field, nor closing.")
   }
 
   bib <-
@@ -71,7 +72,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
       .report_error(line_no = line_no,
                     context = bib[line_no],
                     error_message = "Each field line in .bib must end with a comma (to allow reordering).")
-      stop("Each field line in .bib must end with a comma (to allow intra-entry reordering).")
+      if (bib_warn_only)  warning("Each field line in .bib must end with a comma (to allow intra-entry reordering).")
+      if (!bib_warn_only)    stop("Each field line in .bib must end with a comma (to allow intra-entry reordering).")
     }
   }
 
@@ -100,7 +102,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
            value = TRUE) %>%
       .[1]
     cat(first_bad)
-    stop(cat(crayon::bgRed(symbol$cross)), "Institutional authors should be abbreviated.")
+    if (bib_warn_only)  warning(cat(crayon::bgRed(symbol$cross)), "Institutional authors should be abbreviated.")
+    if (!bib_warn_only)    stop(cat(crayon::bgRed(symbol$cross)), "Institutional authors should be abbreviated.")
   }
 
 
@@ -148,7 +151,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
       .[arent_Articles_but_should_be] %>%
       .[1] %>%
       cat
-    stop(cat(crayon::bgRed(symbol$cross)), "URL suggests the article type should be used.")
+    if (bib_warn_only)  warning(cat(crayon::bgRed(symbol$cross)), "URL suggests the article type should be used.")
+    if (!bib_warn_only)    stop(cat(crayon::bgRed(symbol$cross)), "URL suggests the article type should be used.")
   }
 
   # Once we have verified all are articles, check the right journal has been included.
@@ -203,7 +207,9 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                                    "journal = {", incorrect_journal_entries[1][["journal"]], "} ,", "\n\n",
                                    "but\n\t",
                                    "journal = {", incorrect_journal_entries[1][["journal_actual"]], "} ."))
-    stop("In entry", "\n\t",
+    
+    if (bib_warn_only) {
+    warning("In entry", "\n\t",
          incorrect_journal_entries[1][["key"]], "\n\n",
          "I see:", "\n\t",
          "url = {", incorrect_journal_entries[1][["url"]], "}", "\n\n",
@@ -211,6 +217,19 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
          "journal = {", incorrect_journal_entries[1][["journal"]], "} ,", "\n\n",
          "but\n\t",
          "journal = {", incorrect_journal_entries[1][["journal_actual"]], "} .")
+    }
+    
+    if (!bib_warn_only) {
+      stop("In entry", "\n\t",
+           incorrect_journal_entries[1][["key"]], "\n\n",
+           "I see:", "\n\t",
+           "url = {", incorrect_journal_entries[1][["url"]], "}", "\n\n",
+           "which suggests", "\n\t",
+           "journal = {", incorrect_journal_entries[1][["journal"]], "} ,", "\n\n",
+           "but\n\t",
+           "journal = {", incorrect_journal_entries[1][["journal_actual"]], "} .")
+    }
+    
   }
 
   check_legislation <- function(bb){
@@ -228,8 +247,14 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
       .report_error(line_no = which(is_bill_title)[1],
                     context = bb[is_bill_title[1]],
                     error_message = "Bill title in upright font.")
-      stop("When citing a Bill of Parliament, the title must be in upright font.", "\n",
+      if (bib_warn_only) {
+      warning("When citing a Bill of Parliament, the title must be in upright font.", "\n",
            "Use\n\ttitle = {\\textup{...}},\n\t\t\t\t\tin the .bib file.")
+      }
+      if (!bib_warn_only) {
+        stop("When citing a Bill of Parliament, the title must be in upright font.", "\n",
+             "Use\n\ttitle = {\\textup{...}},\n\t\t\t\t\tin the .bib file.")
+      }
     }
 
   }
@@ -262,13 +287,15 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                   !grepl("grattan\\.edu\\.au/report/", trimmed_bib, perl = TRUE)))
       for (x in line_nos)
         cat(x, ": ", trimmed_bib[[x]], "\n")
-      stop("URL to Grattan Report does not use https://grattan.edu.au/report/ domain.")
+      if (bib_warn_only) warning("URL to Grattan Report does not use https://grattan.edu.au/report/ domain.")
+      if (!bib_warn_only)   stop("URL to Grattan Report does not use https://grattan.edu.au/report/ domain.")
     }
 
 
     if (any(and(is_GrattanReport_url,
                 grepl(".pdf", trimmed_bib, fixed = TRUE)))){
-      stop("URLs to Grattan Report points to pdf. The URL should be of the landing page.")
+      if (bib_warn_only) warning("URLs to Grattan Report points to pdf. The URL should be of the landing page.")
+      if (!bib_warn_only)   stop("URLs to Grattan Report points to pdf. The URL should be of the landing page.")
     }
 
   }
@@ -290,10 +317,18 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
   # dois should not include the top-level URL
   if (any(grepl("^\\s+(doi).*https?[:][/][/]", bib, perl = TRUE))){
     cat(grep("^\\s+(doi).*https?[:][/][/]", bib, perl = TRUE, value = TRUE)[[1]])
-    stop("DOI entries must be in the form", "\n\t",
+    if (bib_warn_only) {
+    warning("DOI entries must be in the form", "\n\t",
          "10.1787/9789264229945-en", "\n",
          "not", "\n\t",
          "http://dx.doi.org/10.1787/9789264229945-en")
+    }
+    if (!bib_warn_only) {
+      stop("DOI entries must be in the form", "\n\t",
+           "10.1787/9789264229945-en", "\n",
+           "not", "\n\t",
+           "http://dx.doi.org/10.1787/9789264229945-en")
+    }
   }
 
   just_years_and_dates <-
@@ -314,7 +349,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
         bad_entry[2], "\n\t",
         bad_entry[3], "\n\t",
         bad_entry[4], "\n")
-    stop("Date and year should not both appear in bibliography.")
+    if (bib_warn_only) warning("Date and year should not both appear in bibliography.")
+    if (!bib_warn_only)   stop("Date and year should not both appear in bibliography.")
   }
 
   if (utils::packageVersion("TeXCheckR") > package_version("0.4.4")) {
@@ -351,7 +387,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                     error_message = paste0("Author needs to be:\n\t",
                                            "{{Attorney-General's Department}}\n",
                                            "precisely."))
-      if (stop_on_AG) stop("Attorney-General's Department: author")
+      if (bib_warn_only) warning("Attorney-General's Department: author")
+      if (!bib_warn_only)   stop("Attorney-General's Department: author")
     }
 
     AG_urls <-
@@ -373,7 +410,8 @@ validate_bibliography <- function(path = ".", file = NULL, .report_error, rstudi
                                            "Attorney-General's Department ",
                                            "but url did not contain ",
                                            ".ag.gov.au"))
-      if (stop_on_AG) stop("Attorney-General's Department: url")
+      if (bib_warn_only) warning("Attorney-General's Department: url")
+      if (!bib_warn_only)   stop("Attorney-General's Department: url")
     }
   }
 
